@@ -1,0 +1,107 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Project</p>
+    <h1><%= @project.name %></h1>
+  </div>
+
+  <div class="page-actions">
+    <%= link_to "Edit", edit_project_path(@project), class: "button" %>
+    <%= button_to "Delete", @project, method: :delete, class: "button danger", data: { turbo_confirm: "Delete this project?" } %>
+  </div>
+</section>
+
+<section class="details-panel">
+  <dl>
+    <div>
+      <dt>Client</dt>
+      <dd><%= link_to @project.client.name, @project.client %></dd>
+    </div>
+    <div>
+      <dt>Status</dt>
+      <dd><%= status_badge(@project) %></dd>
+    </div>
+    <div>
+      <dt>Start date</dt>
+      <dd><%= @project.start_date || "-" %></dd>
+    </div>
+    <div>
+      <dt>Deadline</dt>
+      <dd><%= @project.deadline || "-" %></dd>
+    </div>
+    <div>
+      <dt>Budget</dt>
+      <dd><%= @project.budget.present? ? number_to_currency(@project.budget) : "-" %></dd>
+    </div>
+    <div>
+      <dt>Description</dt>
+      <dd><%= simple_format(@project.description.presence || "-") %></dd>
+    </div>
+    <div>
+      <dt>Files</dt>
+      <dd>
+        <% if @project.files.attached? %>
+          <ul class="attachment-list">
+            <% @project.files.attachments.each do |file| %>
+              <li>
+                <%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment") %>
+                <%= button_to "Remove", project_file_path(file), method: :delete, class: "link-button danger", data: { turbo_confirm: "Remove this file?" } %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          -
+        <% end %>
+      </dd>
+    </div>
+  </dl>
+</section>
+
+<section class="dashboard-grid">
+  <article class="summary-panel">
+    <div class="section-heading">
+      <h2>Project tasks</h2>
+      <%= link_to "Add task", new_task_path(project_id: @project.id) %>
+    </div>
+
+    <% if @tasks.any? %>
+      <ul class="summary-list">
+        <% @tasks.each do |task| %>
+          <li>
+            <div>
+              <%= link_to task.title, task %>
+              <span><%= task.due_date || "No due date" %></span>
+            </div>
+            <%= status_badge(task) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No tasks for this project yet.</p>
+    <% end %>
+  </article>
+
+  <article class="summary-panel">
+    <div class="section-heading">
+      <h2>Project invoices</h2>
+      <%= link_to "Add invoice", new_invoice_path(project_id: @project.id) %>
+    </div>
+
+    <% if @invoices.any? %>
+      <ul class="summary-list">
+        <% @invoices.each do |invoice| %>
+          <li>
+            <div>
+              <%= link_to invoice.invoice_number, invoice %>
+              <span><%= invoice.due_date || "No due date" %></span>
+            </div>
+            <strong><%= number_to_currency(invoice.amount) %></strong>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No invoices for this project yet.</p>
+    <% end %>
+  </article>
+</section>
+
+<%= link_to "Back to projects", projects_path %>

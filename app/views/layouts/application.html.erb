@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Freelance Manager" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Freelance Manager">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="<%= authenticated? ? "app-body" : "auth-body" %>">
+    <% if authenticated? %>
+      <div class="app-shell">
+        <aside class="sidebar">
+          <%= link_to root_path, class: "brand-block" do %>
+            <span class="brand-mark">FM</span>
+            <span>
+              <strong>Freelance Manager</strong>
+              <small>Local workspace</small>
+            </span>
+          <% end %>
+
+          <nav class="sidebar-nav">
+            <%= app_nav_link "Dashboard", root_path, "dashboard" %>
+            <%= app_nav_link "Clients", clients_path, "clients" %>
+            <%= app_nav_link "Projects", projects_path, "projects" %>
+            <%= app_nav_link "Tasks", tasks_path, "tasks" %>
+            <%= app_nav_link "Invoices", invoices_path, "invoices" %>
+          </nav>
+
+          <div class="sidebar-account">
+            <span class="avatar"><%= user_initial(current_user) %></span>
+            <div>
+              <strong><%= current_user.name.presence || current_user.email_address %></strong>
+              <%= link_to "Edit profile", edit_registration_path %>
+            </div>
+          </div>
+
+          <%= button_to "Log out", session_path, method: :delete, class: "button ghost full-width" %>
+        </aside>
+
+        <div class="main-shell">
+          <header class="top-bar">
+            <div>
+              <span class="top-bar-title">Plan work, track delivery, and manage billing.</span>
+            </div>
+
+            <div class="quick-actions">
+              <%= link_to "New client", new_client_path, class: "button" %>
+              <%= link_to "New project", new_project_path, class: "button primary" %>
+            </div>
+          </header>
+
+          <main class="container">
+            <% flash.each do |type, message| %>
+              <div class="flash <%= type %>"><%= message %></div>
+            <% end %>
+
+            <%= yield %>
+          </main>
+        </div>
+      </div>
+    <% else %>
+      <header class="auth-topbar">
+        <%= link_to root_path, class: "brand-block compact" do %>
+          <span class="brand-mark">FM</span>
+          <span>
+            <strong>Freelance Manager</strong>
+          </span>
+        <% end %>
+      </header>
+
+      <main class="auth-container">
+        <% flash.each do |type, message| %>
+          <div class="flash <%= type %>"><%= message %></div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    <% end %>
+  </body>
+</html>

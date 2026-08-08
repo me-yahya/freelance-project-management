@@ -1,0 +1,18 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Invoices</p>
+    <h1>New invoice</h1>
+  </div>
+</section>
+
+<% if @projects.any? %>
+  <section class="form-panel">
+    <%= render "form", invoice: @invoice %>
+  </section>
+<% else %>
+  <section class="empty-state">
+    <h2>Add a project first</h2>
+    <p>Every invoice belongs to a project, so create a project before creating invoices.</p>
+    <%= link_to "New project", new_project_path, class: "button primary" %>
+  </section>
+<% end %>

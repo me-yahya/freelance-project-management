@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project: one
+  invoice_number: INV-001
+  amount: 1500.00
+  issue_date: 2026-08-09
+  due_date: 2026-08-30
+  status: sent
+
+two:
+  project: two
+  invoice_number: INV-002
+  amount: 2500.00
+  issue_date: 2026-08-09
+  due_date: 2026-09-10
+  status: paid

@@ -1,0 +1,38 @@
+<%= render "shared/form_errors", record: client %>
+
+<%= form_with model: client, class: "stacked-form" do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, required: true, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :company %>
+    <%= form.text_field :company %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.email_field :email, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phone %>
+    <%= form.telephone_field :phone, autocomplete: "tel" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address %>
+    <%= form.text_area :address, rows: 4 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :notes %>
+    <%= form.text_area :notes, rows: 5 %>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit client.persisted? ? "Update client" : "Create client", class: "button primary" %>
+    <%= link_to "Cancel", client.persisted? ? client_path(client) : clients_path %>
+  </div>
+<% end %>

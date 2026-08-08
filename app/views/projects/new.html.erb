@@ -1,0 +1,18 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Projects</p>
+    <h1>New project</h1>
+  </div>
+</section>
+
+<% if @clients.any? %>
+  <section class="form-panel">
+    <%= render "form", project: @project %>
+  </section>
+<% else %>
+  <section class="empty-state">
+    <h2>Add a client first</h2>
+    <p>Every project belongs to a client, so create a client before creating a project.</p>
+    <%= link_to "New client", new_client_path, class: "button primary" %>
+  </section>
+<% end %>

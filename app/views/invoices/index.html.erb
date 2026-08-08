@@ -1,0 +1,69 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Invoices</p>
+    <h1>Your invoices</h1>
+  </div>
+
+  <%= link_to "New invoice", new_invoice_path, class: "button primary" %>
+</section>
+
+<section class="metric-grid">
+  <article class="metric-card">
+    <span>Total invoiced</span>
+    <strong><%= number_to_currency(@total_invoiced) %></strong>
+  </article>
+  <article class="metric-card">
+    <span>Total paid</span>
+    <strong><%= number_to_currency(@total_paid) %></strong>
+  </article>
+</section>
+
+<section class="toolbar">
+  <%= form_with url: invoices_path, method: :get, class: "search-form filters-form" do |form| %>
+    <%= form.label :query, "Search invoices", class: "sr-only" %>
+    <%= form.search_field :query, value: @query, placeholder: "Search by invoice number" %>
+    <%= form.select :status, options_for_select([ [ "All", "" ] ] + Invoice.status_options, @status) %>
+    <%= form.submit "Filter", class: "button" %>
+    <% if @query.present? || @status.present? %>
+      <%= link_to "Clear", invoices_path %>
+    <% end %>
+  <% end %>
+</section>
+
+<% if @invoices.any? %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Invoice</th>
+          <th>Project</th>
+          <th>Status</th>
+          <th>Amount</th>
+          <th>Due</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invoices.each do |invoice| %>
+          <tr>
+            <td><%= link_to invoice.invoice_number, invoice %></td>
+            <td><%= link_to invoice.project.name, invoice.project %></td>
+            <td><%= status_badge(invoice) %></td>
+            <td><%= number_to_currency(invoice.amount) %></td>
+            <td><%= invoice.due_date || "-" %></td>
+            <td class="actions">
+              <%= link_to "Edit", edit_invoice_path(invoice) %>
+              <%= button_to "Delete", invoice, method: :delete, class: "link-button danger", data: { turbo_confirm: "Delete this invoice?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <section class="empty-state">
+    <h2>No invoices found</h2>
+    <p>Create invoices after creating a project.</p>
+    <%= link_to "New invoice", new_invoice_path, class: "button primary" %>
+  </section>
+<% end %>

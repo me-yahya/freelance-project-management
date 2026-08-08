@@ -1,0 +1,215 @@
+<section class="page-header hero-header">
+  <div>
+    <p class="eyebrow">Dashboard</p>
+    <h1>Welcome, <%= current_user.name.presence || "Freelancer" %></h1>
+    <p class="lead">A focused workspace for clients, active delivery, and billing follow-through.</p>
+  </div>
+
+  <div class="page-actions">
+    <%= link_to "New task", new_task_path, class: "button" %>
+    <%= link_to "New invoice", new_invoice_path, class: "button primary" %>
+  </div>
+</section>
+
+<section class="dashboard-overview">
+  <article class="overview-card financial-overview">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Financial overview</p>
+        <h2>Billing snapshot</h2>
+      </div>
+      <%= link_to "Invoices", invoices_path %>
+    </div>
+
+    <div class="money-total">
+      <span>Total invoiced</span>
+      <strong><%= number_to_currency(@total_invoiced) %></strong>
+    </div>
+
+    <div class="mini-metrics">
+      <div>
+        <span>Paid</span>
+        <strong><%= number_to_currency(@total_paid) %></strong>
+      </div>
+      <div>
+        <span>Outstanding</span>
+        <strong><%= number_to_currency(@outstanding_amount) %></strong>
+      </div>
+      <div>
+        <span>Collection</span>
+        <strong><%= @collection_rate %>%</strong>
+      </div>
+    </div>
+  </article>
+
+  <article class="overview-card work-overview">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Workload</p>
+        <h2>Delivery focus</h2>
+      </div>
+      <%= link_to "Tasks", tasks_path %>
+    </div>
+
+    <div class="focus-number">
+      <span>Open tasks</span>
+      <strong><%= @pending_task_count %></strong>
+    </div>
+
+    <div class="workload-list">
+      <div>
+        <span>Active projects</span>
+        <strong><%= @active_project_count %></strong>
+      </div>
+      <div>
+        <span>Overdue tasks</span>
+        <strong><%= @overdue_task_count %></strong>
+      </div>
+      <div>
+        <span>Completed projects</span>
+        <strong><%= @completed_project_count %></strong>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="metric-grid dashboard-metrics">
+  <article class="metric-card">
+    <span>Total clients</span>
+    <strong><%= @client_count %></strong>
+  </article>
+  <article class="metric-card">
+    <span>Active projects</span>
+    <strong><%= @active_project_count %></strong>
+  </article>
+  <article class="metric-card">
+    <span>Pending tasks</span>
+    <strong><%= @pending_task_count %></strong>
+  </article>
+  <article class="metric-card">
+    <span>Overdue tasks</span>
+    <strong><%= @overdue_task_count %></strong>
+  </article>
+</section>
+
+<% if @client_count.zero? %>
+  <section class="onboarding-panel">
+    <div>
+      <p class="eyebrow">Quick start</p>
+      <h2>Set up your freelance workspace</h2>
+      <p class="muted">Start with a client, then add projects, tasks, invoices, and files as the work moves forward.</p>
+    </div>
+
+    <div class="onboarding-steps">
+      <%= link_to new_client_path, class: "step-card" do %>
+        <span>1</span>
+        <strong>Add your first client</strong>
+        <small>Store contact details, notes, and company info.</small>
+      <% end %>
+      <%= link_to new_project_path, class: "step-card" do %>
+        <span>2</span>
+        <strong>Create a project</strong>
+        <small>Track budget, deadlines, and current status.</small>
+      <% end %>
+      <%= link_to invoices_path, class: "step-card" do %>
+        <span>3</span>
+        <strong>Track billing</strong>
+        <small>Manage draft, sent, paid, and overdue invoices.</small>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<section class="dashboard-grid">
+  <article class="summary-panel">
+    <div class="section-heading">
+      <h2>Recent projects</h2>
+      <%= link_to "View all", projects_path %>
+    </div>
+
+    <% if @recent_projects.any? %>
+      <ul class="summary-list">
+        <% @recent_projects.each do |project| %>
+          <li>
+            <div>
+              <%= link_to project.name, project %>
+              <span><%= project.client.name %></span>
+            </div>
+            <%= status_badge(project) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No projects yet.</p>
+    <% end %>
+  </article>
+
+  <article class="summary-panel">
+    <div class="section-heading">
+      <h2>Upcoming deadlines</h2>
+      <%= link_to "View all", projects_path %>
+    </div>
+
+    <% if @upcoming_deadlines.any? %>
+      <ul class="summary-list">
+        <% @upcoming_deadlines.each do |project| %>
+          <li>
+            <div>
+              <%= link_to project.name, project %>
+              <span><%= project.client.name %></span>
+            </div>
+            <strong><%= project.deadline %></strong>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No upcoming deadlines.</p>
+    <% end %>
+  </article>
+
+  <article class="summary-panel">
+    <div class="section-heading">
+      <h2>Priority tasks</h2>
+      <%= link_to "View all", tasks_path %>
+    </div>
+
+    <% if @priority_tasks.any? %>
+      <ul class="summary-list">
+        <% @priority_tasks.each do |task| %>
+          <li>
+            <div>
+              <%= link_to task.title, task %>
+              <span><%= task.project.name %></span>
+            </div>
+            <%= priority_badge(task) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No open tasks.</p>
+    <% end %>
+  </article>
+
+  <article class="summary-panel">
+    <div class="section-heading">
+      <h2>Recent invoices</h2>
+      <%= link_to "View all", invoices_path %>
+    </div>
+
+    <% if @recent_invoices.any? %>
+      <ul class="summary-list">
+        <% @recent_invoices.each do |invoice| %>
+          <li>
+            <div>
+              <%= link_to invoice.invoice_number, invoice %>
+              <span><%= invoice.project.name %></span>
+            </div>
+            <strong><%= number_to_currency(invoice.amount) %></strong>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted">No invoices yet.</p>
+    <% end %>
+  </article>
+</section>

@@ -1,0 +1,61 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Clients</p>
+    <h1>Your clients</h1>
+  </div>
+
+  <%= link_to "New client", new_client_path, class: "button primary" %>
+</section>
+
+<section class="toolbar">
+  <%= form_with url: clients_path, method: :get, class: "search-form" do |form| %>
+    <%= form.label :query, "Search clients", class: "sr-only" %>
+    <%= form.search_field :query, value: @query, placeholder: "Search by name, company, or email" %>
+    <%= form.submit "Search", class: "button" %>
+    <% if @query.present? %>
+      <%= link_to "Clear", clients_path %>
+    <% end %>
+  <% end %>
+</section>
+
+<% if @clients.any? %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Company</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @clients.each do |client| %>
+          <tr>
+            <td><%= link_to client.name, client %></td>
+            <td><%= client.company.presence || "-" %></td>
+            <td><%= mail_to client.email if client.email.present? %></td>
+            <td><%= client.phone.presence || "-" %></td>
+            <td class="actions">
+              <%= link_to "Edit", edit_client_path(client) %>
+              <%= button_to "Delete", client, method: :delete, class: "link-button danger", data: { turbo_confirm: "Delete this client?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <section class="empty-state">
+    <% if @query.present? %>
+      <h2>No clients found</h2>
+      <p>No clients match "<%= @query %>".</p>
+      <%= link_to "View all clients", clients_path, class: "button" %>
+    <% else %>
+      <h2>No clients yet</h2>
+      <p>Add your first client before creating projects for them.</p>
+      <%= link_to "New client", new_client_path, class: "button primary" %>
+    <% end %>
+  </section>
+<% end %>

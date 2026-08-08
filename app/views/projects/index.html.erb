@@ -1,0 +1,61 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Projects</p>
+    <h1>Your projects</h1>
+  </div>
+
+  <%= link_to "New project", new_project_path, class: "button primary" %>
+</section>
+
+<section class="toolbar">
+  <%= form_with url: projects_path, method: :get, class: "search-form filters-form" do |form| %>
+    <%= form.label :query, "Search projects", class: "sr-only" %>
+    <%= form.search_field :query, value: @query, placeholder: "Search by name or description" %>
+
+    <%= form.label :status, "Status", class: "sr-only" %>
+    <%= form.select :status, options_for_select([ [ "All", "" ] ] + Project.status_options, @status) %>
+
+    <%= form.submit "Filter", class: "button" %>
+    <% if @query.present? || @status.present? %>
+      <%= link_to "Clear", projects_path %>
+    <% end %>
+  <% end %>
+</section>
+
+<% if @projects.any? %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Client</th>
+          <th>Status</th>
+          <th>Deadline</th>
+          <th>Budget</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= link_to project.name, project %></td>
+            <td><%= link_to project.client.name, project.client %></td>
+            <td><%= status_badge(project) %></td>
+            <td><%= project.deadline || "-" %></td>
+            <td><%= project.budget.present? ? number_to_currency(project.budget) : "-" %></td>
+            <td class="actions">
+              <%= link_to "Edit", edit_project_path(project) %>
+              <%= button_to "Delete", project, method: :delete, class: "link-button danger", data: { turbo_confirm: "Delete this project?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <section class="empty-state">
+    <h2>No projects found</h2>
+    <p>Create a project after adding at least one client.</p>
+    <%= link_to "New project", new_project_path, class: "button primary" %>
+  </section>
+<% end %>

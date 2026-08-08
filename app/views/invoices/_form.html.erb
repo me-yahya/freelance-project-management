@@ -1,0 +1,42 @@
+<%= render "shared/form_errors", record: invoice %>
+
+<%= form_with model: invoice, class: "stacked-form" do |form| %>
+  <div class="field">
+    <%= form.label :project_id, "Project" %>
+    <%= form.collection_select :project_id, @projects, :id, :name, { prompt: "Choose a project" }, required: true %>
+  </div>
+
+  <div class="two-column-fields">
+    <div class="field">
+      <%= form.label :invoice_number %>
+      <%= form.text_field :invoice_number, required: true, autofocus: true %>
+    </div>
+
+    <div class="field">
+      <%= form.label :amount %>
+      <%= form.number_field :amount, min: 0.01, step: 0.01, required: true %>
+    </div>
+  </div>
+
+  <div class="two-column-fields">
+    <div class="field">
+      <%= form.label :issue_date %>
+      <%= form.date_field :issue_date %>
+    </div>
+
+    <div class="field">
+      <%= form.label :due_date %>
+      <%= form.date_field :due_date %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.select :status, Invoice.status_options %>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit invoice.persisted? ? "Update invoice" : "Create invoice", class: "button primary" %>
+    <%= link_to "Cancel", invoice.persisted? ? invoice_path(invoice) : invoices_path %>
+  </div>
+<% end %>

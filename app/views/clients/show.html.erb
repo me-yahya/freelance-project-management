@@ -1,0 +1,38 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Client</p>
+    <h1><%= @client.name %></h1>
+  </div>
+
+  <div class="page-actions">
+    <%= link_to "Edit", edit_client_path(@client), class: "button" %>
+    <%= button_to "Delete", @client, method: :delete, class: "button danger", data: { turbo_confirm: "Delete this client?" } %>
+  </div>
+</section>
+
+<section class="details-panel">
+  <dl>
+    <div>
+      <dt>Company</dt>
+      <dd><%= @client.company.presence || "-" %></dd>
+    </div>
+    <div>
+      <dt>Email</dt>
+      <dd><%= @client.email.present? ? mail_to(@client.email) : "-" %></dd>
+    </div>
+    <div>
+      <dt>Phone</dt>
+      <dd><%= @client.phone.presence || "-" %></dd>
+    </div>
+    <div>
+      <dt>Address</dt>
+      <dd><%= simple_format(@client.address.presence || "-") %></dd>
+    </div>
+    <div>
+      <dt>Notes</dt>
+      <dd><%= simple_format(@client.notes.presence || "-") %></dd>
+    </div>
+  </dl>
+</section>
+
+<%= link_to "Back to clients", clients_path %>

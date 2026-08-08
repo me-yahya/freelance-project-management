@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project: one
+  title: Draft homepage
+  description: Create the initial homepage draft
+  due_date: 2026-08-20
+  priority: high
+  status: in_progress
+
+two:
+  project: two
+  title: Configure reports
+  description: Build report configuration
+  due_date: 2026-08-25
+  priority: medium
+  status: to_do

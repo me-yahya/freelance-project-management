@@ -1,0 +1,18 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Tasks</p>
+    <h1>New task</h1>
+  </div>
+</section>
+
+<% if @projects.any? %>
+  <section class="form-panel">
+    <%= render "form", task: @task %>
+  </section>
+<% else %>
+  <section class="empty-state">
+    <h2>Add a project first</h2>
+    <p>Every task belongs to a project, so create a project before creating tasks.</p>
+    <%= link_to "New project", new_project_path, class: "button primary" %>
+  </section>
+<% end %>

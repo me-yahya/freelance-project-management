@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  name: Website Redesign
+  description: Redesign the marketing site
+  start_date: 2026-08-09
+  deadline: 2026-08-30
+  budget: 2500.00
+  status: active
+
+two:
+  client: two
+  name: Internal Portal
+  description: Build an internal dashboard
+  start_date: 2026-08-09
+  deadline: 2026-09-15
+  budget: 5000.00
+  status: planned

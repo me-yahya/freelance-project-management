@@ -1,0 +1,22 @@
+<section class="auth-panel">
+  <h1>Sign in</h1>
+
+  <%= form_with url: session_path, class: "stacked-form" do |form| %>
+    <div class="field">
+      <%= form.label :email_address, "Email" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address] %>
+    </div>
+
+    <div class="field">
+      <%= form.label :password %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72 %>
+    </div>
+
+    <%= form.submit "Sign in", class: "button primary" %>
+  <% end %>
+
+  <div class="auth-actions">
+    <%= link_to "Create account", new_registration_path %>
+    <%= link_to "Forgot password?", new_password_path %>
+  </div>
+</section>

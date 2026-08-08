@@ -1,0 +1,53 @@
+<%= render "shared/form_errors", record: project %>
+
+<%= form_with model: project, class: "stacked-form" do |form| %>
+  <div class="field">
+    <%= form.label :client_id, "Client" %>
+    <%= form.collection_select :client_id, @clients, :id, :name, { prompt: "Choose a client" }, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name, "Project name" %>
+    <%= form.text_field :name, required: true, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+
+  <div class="two-column-fields">
+    <div class="field">
+      <%= form.label :start_date %>
+      <%= form.date_field :start_date %>
+    </div>
+
+    <div class="field">
+      <%= form.label :deadline %>
+      <%= form.date_field :deadline %>
+    </div>
+  </div>
+
+  <div class="two-column-fields">
+    <div class="field">
+      <%= form.label :budget %>
+      <%= form.number_field :budget, min: 0, step: 0.01 %>
+    </div>
+
+    <div class="field">
+      <%= form.label :status %>
+      <%= form.select :status, Project.status_options %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :files, "Project files" %>
+    <%= form.file_field :files, multiple: true %>
+    <small>Attach requirements, images, PDFs, or other project files.</small>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit project.persisted? ? "Update project" : "Create project", class: "button primary" %>
+    <%= link_to "Cancel", project.persisted? ? project_path(project) : projects_path %>
+  </div>
+<% end %>

@@ -1,0 +1,38 @@
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Invoice</p>
+    <h1><%= @invoice.invoice_number %></h1>
+  </div>
+
+  <div class="page-actions">
+    <%= link_to "Edit", edit_invoice_path(@invoice), class: "button" %>
+    <%= button_to "Delete", @invoice, method: :delete, class: "button danger", data: { turbo_confirm: "Delete this invoice?" } %>
+  </div>
+</section>
+
+<section class="details-panel">
+  <dl>
+    <div>
+      <dt>Project</dt>
+      <dd><%= link_to @invoice.project.name, @invoice.project %></dd>
+    </div>
+    <div>
+      <dt>Status</dt>
+      <dd><%= status_badge(@invoice) %></dd>
+    </div>
+    <div>
+      <dt>Amount</dt>
+      <dd><%= number_to_currency(@invoice.amount) %></dd>
+    </div>
+    <div>
+      <dt>Issue date</dt>
+      <dd><%= @invoice.issue_date || "-" %></dd>
+    </div>
+    <div>
+      <dt>Due date</dt>
+      <dd><%= @invoice.due_date || "-" %></dd>
+    </div>
+  </dl>
+</section>
+
+<%= link_to "Back to invoices", invoices_path %>

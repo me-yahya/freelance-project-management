@@ -1,0 +1,12 @@
+<section class="auth-panel">
+  <h1>Forgot your password?</h1>
+
+  <%= form_with url: passwords_path, class: "stacked-form" do |form| %>
+    <div class="field">
+      <%= form.label :email_address, "Email" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address] %>
+    </div>
+
+    <%= form.submit "Email reset instructions", class: "button primary" %>
+  <% end %>
+</section>

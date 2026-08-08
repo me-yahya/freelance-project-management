@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: Acme Design
+  company: Acme Co
+  email: hello@acme.example
+  phone: 555-0100
+  address: 123 Market Street
+  notes: Primary design client
+
+two:
+  user: two
+  name: Beta Systems
+  company: Beta LLC
+  email: contact@beta.example
+  phone: 555-0200
+  address: 456 Broadway
+  notes: Belongs to another user
